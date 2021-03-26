@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 - Weather Station</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+        var temperature, pressure, lightlvl;
+        var reloadPeriod = 1000;
+        var running = false;
+        var ready = false;
+
+        function loadValues() {
+            if (!running) return;
+            var xh = new XMLHttpRequest();
+            xh.onreadystatechange = function() {
+                if (xh.readyState == 4) {
+                    ready = true;
+                    if (xh.status == 200) {
+                        var res = JSON.parse(xh.responseText);
+                        temperature = res.temperature;
+                        pressure = res.pressure;
+                        lightlvl = res.lightlvl;
+                        if (running) setTimeout(loadValues, reloadPeriod);
+                    } else running = false;
+                }
+            };
+            xh.open("GET", "/sensorvalues", true);
+            xh.send(null);
+            if (ready) {
+                document.getElementById("temperature").innerHTML = temperature;
+                document.getElementById("pressure").innerHTML = pressure;
+                document.getElementById("lightlvl").innerHTML = lightlvl;
+            }
+        };
+
+        function run() {
+            if (!running) {
+                running = true;
+                loadValues();
+            }
+        }
+
+    </script>
+</head>
+
+<body onload="run()">
+    <header>
+        <h1>ESP32 - Weather Station</h1>
+    </header>
+    
+    <div class="wifi">
+        <p>To configure WiFi: <a href="wifi.htm">Go here</a></p>
+    </div>
+
+    <main class="container">
+        <div class="container-center">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Temperature</h2>
+                </div>
+                <div class="card-body">
+                    <div class="card-img">
+                        <img src="thermometer.jpg" alt="">
+                    </div>
+                    <div class="card-value">
+                        <p>
+                            <span id="temperature">0</span>
+                            <span> &deg;C</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Pressure</h2>
+                </div>
+                <div class="card-body">
+                    <div class="card-img">
+                        <img src="barometer.jpg" alt="">
+                    </div>
+                    <div class="card-value">
+                        <p>
+                            <span id="pressure">0</span>
+                            <span> hPa</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">
+                    <h2>Light level</h2>
+                </div>
+                <div class="card-body">
+                    <div class="card-img">
+                        <img src="lichtmeter.jpg" alt="">
+                    </div>
+                    <div class="card-value">
+                        <p>
+                            <span id="lightlvl">0</span>
+                            <span> lux</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>&copy; Johan Torfs</p>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,151 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Verdana, sans-serif;
+    font-size: 12px;
+}
+
+body {
+    background-color: azure;
+    color: black;
+}
+
+header {
+    background-color: darkblue;
+    min-height: 4rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.wifi {
+    background-color: blue;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+    
+    min-height: 2rem;
+}
+
+.wifi p {
+    padding: 0.5rem;
+}
+
+.wifi a {
+    color: white;
+}
+
+.wifi a:visited {
+    color: lightgray;
+}
+
+h1 {
+    color: white;
+    font-size: 3rem;
+    padding: 0.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.container {
+    min-height: calc(100vh - 4rem - 3.8rem - 2rem);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-center {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 21rem;
+    height: 18rem;
+    
+    margin: 0.5rem;
+
+    display: flex;
+    flex-flow: column nowrap;
+
+    background-color: white;
+    box-shadow: 3px 3px 3px black;
+    border: solid black 1px;
+    border-radius: 0.5rem;
+
+    overflow: hidden;
+}
+
+.card-title {
+    border-bottom: solid black 1px;
+    background-image: linear-gradient(transparent 0%, transparent 70%, #aaa 100%);
+    text-align: center;
+}
+
+h2 {
+    font-size: 2.5rem;
+    padding: 0.5rm;
+    margin-bottom: 0.1rem;
+}
+
+.card-body {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    
+    flex: 1 1 auto;
+}
+
+.card-img {
+    width: 9rem;
+    margin: 0.5rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-img img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+}
+
+.card-value {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-value p {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+footer {
+    background-color: darkblue;
+    color: white;
+    min-height: 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (min-width: 492px) {
+    .container-center {
+        flex-flow: row wrap;
+    }
+    
+    .card {
+        margin: 1rem;
+    }
+}

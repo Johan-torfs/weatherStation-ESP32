@@ -1,0 +1,55 @@
+.card {
+    height: auto;
+    min-height: 18rem;
+    width: auto;
+    min-width: 21rem;
+}
+
+.card-title {
+    padding: 0.5rem;
+}
+
+.card-body {
+    flex-flow: column nowrap;
+}
+
+.card-body p {
+    text-align: center;
+    margin: 1rem;
+    padding: 0.5rem;
+    border-radius: 10px;
+    background-color: rgba(175, 175, 175, 0.4);
+    font-weight: bold;
+}
+
+.card-body .not-connected {
+    background-color: rgba(250, 0, 30, 0.4);
+}
+
+.card-body .connected {
+    background-color: rgba(99, 255, 85, 0.4);
+}
+
+form {
+    padding: 1rem;
+}
+
+form * {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+}
+
+form label {
+    padding: 0.5rem 0;
+}
+
+.reload {
+    padding: 1rem;
+}
+
+.reload * {
+    width: 100%;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+}

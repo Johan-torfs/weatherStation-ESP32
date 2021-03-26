@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ESP32 - WiFi</title>
+    <link rel="stylesheet" href="stylesheet.css">
+    <link rel="stylesheet" href="wifistyle.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+        var local, ssidcurrent, connected, amount, availableconnections;
+        var reloadPeriod = 1000;
+        var running = false;
+        var ready = false;
+
+        function loadValues() {
+            if (!running) return;
+            var xh = new XMLHttpRequest();
+            xh.onreadystatechange = function() {
+                if (xh.readyState == 4) {
+                    ready = true;
+                    if (xh.status == 200) {
+                        var res = JSON.parse(xh.responseText);
+                        local = res.local;
+                        ssidcurrent = res.ssidcurrent;
+                        connected = res.connected;
+                        amount = res.amount;
+
+                        if (amount > 0) {
+                            availableconnections = res.availableconnections;
+                        }
+                        if (running) setTimeout(loadValues, reloadPeriod);
+                    } else running = false;
+                }
+            };
+            xh.open("GET", "/wificonnections", true);
+            xh.send(null);
+            if (ready) {
+                if (local) {
+                    document.getElementById("local").innerHTML = "You are connected through SoftAP";
+                } else {
+                    document.getElementById("local").innerHTML = "You are connected through WiFi";
+                }
+
+                if (ssidcurrent != "" && connected) {
+                    document.getElementById("connection").classList.remove("not-connected");
+                    document.getElementById("connection").classList.add("connected");
+                    document.getElementById("connection").innerHTML = "ESP32 connected to " + ssidcurrent;
+                } else {
+                    document.getElementById("connection").innerHTML = "ESP32 not connected to WiFi";
+                    document.getElementById("connection").classList.remove("connected");
+                    document.getElementById("connection").classList.add("not-connected");
+                }
+
+                if (amount > 0) {
+                    var innerform = "<label for='name'>WiFi name:</label>";
+                    innerform += "<select name='name' id='name'>";   
+                    for (let i = 0; i < amount; i++) {
+                        var connection = availableconnections[i];
+                        var ssid = connection.ssid;
+                        var encr = connection.encrypted; 
+                        innerform += "<option value=" + ssid + ">" + ssid; //SSID with spaces only puts first word in value!!!
+                        if (encr) {
+                            innerform += " (locked)";
+                        } else {
+                            innerform += " (open)";
+                        }
+                        innerform += "</option>";
+                    }
+                    innerform += "</select>"
+                    innerform += "<label for='pass'>Password:</label>"
+                    innerform += "<input type='password' name='pass' id='pass'>"
+                    innerform += "<button type='submit'>Connect</button>"
+                    document.getElementById("form").innerHTML = innerform;
+                }
+                running = false;
+            }
+        };
+
+        function run() {
+            if (!running) {
+                running = true;
+                loadValues();
+            }
+        }
+
+    </script>
+</head>
+<body onload="run()">
+    <header>
+        <h1>ESP32 - WiFi</h1>
+    </header>
+    
+    <div class="wifi">
+        <p>Go back to <a href="index.htm">home page</a></p>
+    </div>
+    
+    <main class="container">
+        <div class="container-center">
+            <div class="card">
+                <div class="card-title">
+                    <h2>Wifi Connection</h2>
+                </div>
+                <div class="card-body">
+                    <p id="connection">
+                        Loading...
+                    </p>
+                    <p id="local">
+                        Loading...
+                    </p>
+                    <form id="form" action="wifisave" method="POST">
+                    </form>
+                    <div class="reload">
+                        <button onclick="run()">Reload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; Johan Torfs</p>
+    </footer>
+</body>
+</html>
